@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    class Person {
+    constructor(name, age, country) {
+        this.name = name;
+        this.age = age;
+        this.country = country;
+    }
+    displayDetails() {
+        console.log(`Name: ${this.name}`);
+        console.log(`Age: ${this.age}`);
+        console.log(`Country: ${this.country}`);
+    }
+}
+
+let person1 = new Person('xyz', 25, 'USA');
+let person2 = new Person('pqr', 20, 'IND');
+
+alert("person-1 details")
+person1.displayDetails();
+
+alert("person-2 details")
+person2.displayDetails();
+
+
+<!-- task -2  -->
+
+
+   
+class BankAccount {
+    constructor(accountNumber, initialBalance = 0) {
+        this.accountNumber = accountNumber;
+        this.balance = initialBalance;
+    }
+
+    deposit(amount) {
+        if (amount > 0) {
+            this.balance += amount;
+            console.log(`Deposited: ${amount}`);
+        } else {
+            console.log('Deposit amount must be positive.');
+        }
+    }
+
+    
+    withdraw(amount) {
+        if (amount > 0) {
+            if (amount <= this.balance) {
+                this.balance -= amount;
+                console.log(`Withdrawn: ${amount}`);
+            } else {
+                console.log('Insufficient balance');
+            }
+        } else {
+            console.log('Withdrawal amount must be positive.');
+        }
+    }
+
+    displayAccountDetails() {
+        console.log(`A/c No.: ${this.accountNumber}`);
+        console.log(`Opening Balance: ${this.balance}`);
+    }
+
+    displayBalance() {
+        console.log(`Account Balance: ${this.balance}`);
+    }
+}
+
+let account = new BankAccount('212121212', 1500);
+
+
+account.displayAccountDetails();
+
+account.deposit(500);
+
+
+account.withdraw(2500);
+
+
+account.displayBalance();
+
+</script>
+</body>
+</html>
