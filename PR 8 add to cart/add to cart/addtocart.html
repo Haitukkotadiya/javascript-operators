@@ -1,0 +1,217 @@
+<html lang="en">
+
+<head>
+  <title>CART</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="w-100 justify-content-end d-flex mt-4">
+    <a class="btn btn-primary me-4" data-bs-toggle="offcanvas" href="#offcanvasExample" role="buttonaria-controls="offcanvasExample>
+      <img src="img/shopping_cart_45dp_E8EAED_FILL0_wght400_GRAD0_opsz48.png" style="width: 20px;" alt="">
+    </a>
+  </div>
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel"
+    style="width: 824px;">
+    <div class="offcanvas-header">
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <h2 align="center">Cart</h2>
+      <div class="row">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Srno</th>
+              <th scope="col">Name</th>
+              <th scope="col">Image</th>
+              <th scope="col">Price</th>
+              <th scope="col">Qty</th>
+              <th scope="col">Action</th>
+              <th scope="col">Total</th>
+
+            </tr>
+          </thead>
+          <tbody id="carts">
+
+          </tbody>
+        </table>
+        <h3 id="finalAmount"></h3>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <h2 align="center">Products</h2>
+
+    <div class="row" id="products"></div>
+  </div>
+
+  <script>
+    let products = [
+      {
+        id: 1,
+        name: "Mixed Salad",
+        price: 90,
+        qty: 1,
+        image:
+          "https://images.pexels.com/photos/1435893/pexels-photo-1435893.jpeg?auto=compress&cs=tinysrgb&w=800",
+      },
+      {
+        id: 2,
+        name: "Greek Salad",
+        price: 70,
+        qty: 1,
+        image:
+          "https://images.pexels.com/photos/299352/pexels-photo-299352.jpeg?auto=compress&cs=tinysrgb&w=800",
+      },
+      {
+        id: 3,
+        name: "Quinoa salad",
+        price: 80,
+        qty: 1,
+        image:
+          "https://images.pexels.com/photos/1143754/pexels-photo-1143754.jpeg?auto=compress&cs=tinysrgb&w=800",
+      },
+      {
+        id: 4,
+        name: "Avocado salad",
+        price: 100,
+        qty: 1,
+        image:
+          "https://tse4.mm.bing.net/th?id=OIP.2LT7l2oEDjsqW_SCNg4UEQHaFE&pid=Api&P=0&h=180",
+      },
+      {
+        id: 5,
+        name: "Humus salad",
+        price: 85,
+        qty: 1,
+        image:
+          "https://images.pexels.com/photos/1435893/pexels-photo-1435893.jpeg?auto=compress&cs=tinysrgb&w=800",
+      },
+      {
+        id: 6,
+        name: "Chicken salad",
+        price: 95,
+        qty: 1,
+        image:
+          "https://images.pexels.com/photos/806361/pexels-photo-806361.jpeg?auto=compress&cs=tinysrgb&w=800",
+      },
+      {
+        id: 7,
+        name: "Cooked Vegetables ",
+        price: 90,
+        qty: 1,
+        image:
+          "https://images.pexels.com/photos/2741448/pexels-photo-2741448.jpeg?auto=compress&cs=tinysrgb&w=800",
+      },
+      {
+        id: 8,
+        name: "Acai Smoothie",
+        price: 110,
+        qty: 1,
+        image:
+          "https://images.pexels.com/photos/2741448/pexels-photo-2741448.jpeg?auto=compress&cs=tinysrgb&w=800",
+      },
+    ];
+
+    const viewProduct = () => {
+      let tbl = "";
+      products.map((val, index) => {
+        tbl += `
+                            <div class="col-lg-3 mb-2 mt-2">
+                                <div class="card">
+                                    <img src="${val.image}" class="card-img-top" alt="..." style="width: 230px height:230px;">
+                                    <div class="card-body">
+                                    <h5 class="card-title">${val.name}</h5>
+                                    <p class="card-text">$ ${val.price}</p>
+                                    <button onclick="addToCart(${val.id})" class="btn btn-primary">Add Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+      });
+      document.getElementById('products').innerHTML = tbl;
+    };
+
+    viewProduct();
+
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+
+    const addToCart = (productId) => {
+      const product = products.find(val => val.id === productId);
+      if (product) {
+        const existingProduct = cart.find(item => item.id === productId);
+        if (existingProduct) {
+          existingProduct.qty++;
+        } else {
+          cart.push({ ...product, qty: 1 });
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        viewCart();
+        alert("item added to cart");
+      }
+    };
+
+    const deleteFromCart = (productId) => {
+      cart = cart.filter(item => item.id !== productId);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert("removed for cart succesfully");
+      viewCart();
+    };
+
+    const editCart = (id) => {
+      const qty = parseInt(document.getElementById(`qty_${id}`).value);
+      cart = cart.map(item => {
+        if (item.id === id) {
+          item.qty = qty;
+        }
+        if(item.qty == 0){
+          deleteFromCart();
+        }
+        return item;
+      });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      viewCart();
+    };
+
+    const viewCart = () => {
+      let tbl = "";
+      let sum = 0;
+      cart.forEach((val, index) => {
+        sum += val.price * val.qty;
+        tbl += `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${val.name}</td>
+        <td>
+          <img src="${val.image}" width="100"/>
+        </td>
+        <td>${val.price}</td>
+        <td>
+          <input class="form-control w-25" id="qty_${val.id}" onchange="editCart(${val.id})" value="${val.qty}" type="number"/>
+        </td>
+        <td>
+          <button class="btn btn-danger" onclick="deleteFromCart(${val.id})">Delete</button>
+        </td>
+        <td>${val.price * val.qty}</td>
+      </tr>
+    `;
+      });
+      document.getElementById('carts').innerHTML = tbl;
+      document.getElementById('finalAmount').innerHTML = `Amount to pay = ${sum}`;
+    };
+
+    viewCart();
+
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+</body>
+
+</html>
