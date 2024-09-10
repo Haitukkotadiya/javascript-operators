@@ -1,0 +1,106 @@
+<html>
+
+<head>
+    <title>Product List</title>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div align="center">
+        <h2>View Products</h2>
+        <table class="table" border="1" style="border-collapse: collapse">
+            <thead>
+                <tr>
+                    <th>Srno</th>
+                    <th>Thumbnail</th>
+                    <th>Title</th>
+                    <th>Tags</th>
+                    <th>Images</th>
+                    <th>Reviews</th>
+
+                </tr>
+            </thead>
+            <tbody id="postsdata">
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let viewProduct = () => {
+            fetch(`https://dummyjson.com/products`)
+                .then(res => res.json())
+                .then((data) => {
+                    let products = data.products;
+                    console.log(data.products);
+
+                    let tbl = "";
+                    products.map((p, index) => {
+                        tbl +=`
+                            <tr class="align-middle">
+                                <td>${++index}</td>
+                                <td>
+                                    <img src="${p.thumbnail}" width="100px">
+                                    </td>
+                                <td>${p.title}</td>
+                                <td>`
+                                            p.tags.map((tag)=>{
+                                                tbl += `
+                                                            <button>${tag}</button>
+                                                        `
+                                            })
+
+                                        tbl += `</td>
+                                        <td>`
+                                            p.reviews.map((reviews)=>{
+                                                tbl +=`
+                                                    <div>
+                                                       review name:- ${reviews.reviewerName}<br>
+                                                       comment:- ${reviews.comment}<br>
+                                                       ratting:- ${reviews.rating}<br><br>
+                                                    </div>    
+                                                        
+                                                    `
+                                            })
+                                            
+                                            tbl += `</td>
+
+                                <td>`
+                                            p.images.map((image)=>{
+                                                tbl += `
+                                                            <img src="${image}" width="100px">
+                                                        `
+                                            })
+
+                                        tbl += `</td>
+                                        
+
+
+
+                            </tr>
+
+                        `;
+                    })
+                    document.getElementById('postsdata').innerHTML = tbl;
+
+
+                });
+
+        }
+        viewProduct();
+    </script>
+
+</body>
+
+</html>
